@@ -1,0 +1,12 @@
+server.port: 8082
+kafka:
+  enabled: ${KAFKA_ENABLED:true}
+  server: ${KAFKA_HOST:localhost:9092}
+  defaultConcurrency: 3
+
+
+opentracing:
+  jaeger:
+    service-name: SecondService
+    udp-sender.host: localhost
+    udp-sender.port: 6831

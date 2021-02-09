@@ -1,0 +1,9 @@
+server:
+  port: 8083
+kafka:
+  enabled: ${KAFKA_ENABLED:true}
+  server: ${KAFKA_HOST:localhost:9092}
+  defaultConcurrency: 3
+opentracing:
+  jaeger:
+    service-name: ThirdService
