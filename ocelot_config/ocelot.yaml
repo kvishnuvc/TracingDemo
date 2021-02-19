@@ -9,9 +9,7 @@ inspectit:
 
       # These markers are used with a_entrypoint_check to detect the http entry and exit points
       # and to make sure that they are recorded only once per request
-      'http_server_entrypoint_marker':
-        down-propagation: JVM_LOCAL
-      'http_client_entrypoint_marker':
+      'kafka_entrypoint_marker':
         down-propagation: JVM_LOCAL
 
     scopes:
@@ -32,16 +30,6 @@ inspectit:
 
 
     rules:
-#      'r_process_controller_test':
-#        scopes:
-#          's_process_controller_test': true
-#        tracing:
-#          start-span: true
-#          name: 'message-value'
-#        entry:
-#          'message-value':
-#            action: 'a_pc_get_arg_val'
-
       'r_kafka_producer_send':
         scopes:
           's_kafka_producer_send': true
@@ -64,12 +52,11 @@ inspectit:
 
       'r_kafka_kafka_listener':
         include:
-          'r_httpurlconnection_detect_entry': true
+          'r_kafka_detect_entry': true
         scopes:
           's_kafka_kafka_listener': true
         tracing: 
           start-span: true
-          # continue-span: 'http_listener_span'
           attributes:
             'kafka.type': 'kafka_listener_type'
         pre-entry:
@@ -80,25 +67,12 @@ inspectit:
             action: 'a_assign_value'
             constant-input:
               'value': 'listener'
-        # entry:
-        #   'http_listener_span':
-        #     action: 'a_attachment_get'
-        #     data-input: 
-        #       'target': _this
-        #     constant-input: 
-        #       'key': 'span'
-
-
-
-
-      'r_httpurlconnection_detect_entry':
+      'r_kafka_detect_entry':
         pre-entry:
-          'http_is_entry':
+          'kafka_is_entry':
             action: 'a_entrypoint_check'
             constant-input: 
-              'marker': 'http_client_entrypoint_marker'
-
-
+              'marker': 'kafka_entrypoint_marker'
 
     actions:
       'a_pc_get_arg_val':
@@ -121,8 +95,6 @@ inspectit:
         value-body: |
             return ((ProducerRecord)_arg0).topic();
 
-
-
       'a_kafka_up_propagation':
         is-void: true
         imports:
@@ -136,12 +108,10 @@ inspectit:
           _arg1: MessageHeaders
         value-body: |
           Object propagationAlreadyPerformed = _attachments.attach(_arg1, "up_prop_performed", Boolean.TRUE);
-          System.out.println("###############################> a_kafka_up_propagation - " + _arg1);
           if (propagationAlreadyPerformed == null) {
             Collection headerKeys = _context.getPropagationHeaderNames();
             Map presentHeaders = new HashMap();
             Iterator it = headerKeys.iterator();
-            System.out.println("###############################> - " + headerKeys);
 
             while (it.hasNext()) {
               String name = (String) it.next();
@@ -154,16 +124,14 @@ inspectit:
                     headerValue =value.toString();
                   }
                   
-                  System.out.println("###############################> - " + name + ": " + headerValue);
                   presentHeaders.put(name, headerValue);
               }
             }
             _context.readDownPropagationHeaders(presentHeaders);
-            System.out.println("###############################_context> - " + _context);
           }
 
 
-      # Writes down-propagated data to the HTTP Headers
+      # Writes down-propagated data to the Kafka Headers
       'a_kafka_down_propagation':
         is-void: true
         imports:
@@ -181,31 +149,20 @@ inspectit:
           _this: Object
         value-body: |
           Object propagationAlreadyPerformed = _attachments.attach(_arg0, "down_prop_performed", Boolean.TRUE);
-          System.out.println("------------------------> a_kafka_down_propagation - " + _this);
           if (propagationAlreadyPerformed == null) {
             try {
               Map headersIt = _context.getDownPropagationHeaders();
               Iterator it = headersIt.entrySet().iterator();
-
-              
-
               Headers headers = ((ProducerRecord)_arg0).headers();
-                
               while (it.hasNext()) {
                 Object next = it.next();
-                System.out.println("------------------------> "+next);
                 Map$Entry e = (Map$Entry) next;
                 Object mKey = e.getKey();
                 Object mValue = e.getValue();
                 headers.add(mKey.toString(), mValue.toString().getBytes(StandardCharsets.UTF_8));
               }
 
-              System.out.println("------------------------> "+headers);
-
-
             } catch (Exception ex) {
-              System.out.println("------------------------> " + ex);
-
               // silently ignore, this will occur if the url has already been connected
               // normally does not happen, as we also instrument connect()
               // it can still happen if connect() is instrumented last
