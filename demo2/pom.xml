@@ -21,31 +21,31 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-			<version>3.2.2</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>io.opentracing.contrib</groupId>-->
+<!--			<artifactId>opentracing-spring-jaeger-web-starter</artifactId>-->
+<!--			<version>3.2.2</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-kafka-spring</artifactId>
-			<version>0.1.15</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>io.opentracing.contrib</groupId>-->
+<!--			<artifactId>opentracing-kafka-spring</artifactId>-->
+<!--			<version>0.1.15</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
 		</dependency>
-<dependency>
-	<groupId>io.jaegertracing</groupId>
-	<artifactId>jaeger-client</artifactId>
-	<version>1.5.0</version>
-</dependency>
+<!--<dependency>-->
+<!--	<groupId>io.jaegertracing</groupId>-->
+<!--	<artifactId>jaeger-client</artifactId>-->
+<!--	<version>1.5.0</version>-->
+<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>

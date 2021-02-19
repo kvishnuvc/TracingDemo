@@ -1,9 +1,6 @@
 package com.test.trace2.demo2.config;
 
 
-import io.opentracing.Tracer;
-import io.opentracing.contrib.kafka.spring.TracingConsumerFactory;
-import io.opentracing.contrib.kafka.spring.TracingKafkaAspect;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +23,8 @@ public class KafkaEhrConsumerConfig {
 
     private Environment environment;
 
-    @Autowired
-    private Tracer tracer;
+//    @Autowired
+//    private Tracer tracer;
 
     @Autowired
     public void setEnvironment(Environment environment) {
@@ -48,7 +45,7 @@ public class KafkaEhrConsumerConfig {
         Map<String, Object> configProps = getConfigProps("RequestDataConsumer");
 
         // Decorate ConsumerFactory with TracingConsumerFactory
-        return new TracingConsumerFactory<>(new DefaultKafkaConsumerFactory<>(configProps), tracer);
+        return   new DefaultKafkaConsumerFactory<>(configProps);
     }
 
     @Bean
@@ -62,9 +59,9 @@ public class KafkaEhrConsumerConfig {
 
 
 
-    // Use an aspect to decorate @KafkaListeners
-    @Bean
-    public TracingKafkaAspect tracingKafkaAspect() {
-        return new TracingKafkaAspect(tracer);
-    }
+//    // Use an aspect to decorate @KafkaListeners
+//    @Bean
+//    public TracingKafkaAspect tracingKafkaAspect() {
+//        return new TracingKafkaAspect(tracer);
+//    }
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 9803
 kafka:
   enabled: ${KAFKA_ENABLED:true}
   server: ${KAFKA_HOST:localhost:9092}

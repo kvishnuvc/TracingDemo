@@ -1,7 +1,5 @@
 package com.test.trace2.demo2.config;
 
-import io.opentracing.Tracer;
-import io.opentracing.contrib.kafka.spring.TracingProducerFactory;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +19,6 @@ public class KafkaEhrProducerConfig {
 
     private Environment environment;
 
-    @Autowired
-    Tracer tracer;
 
     @Autowired
     public void setEnvironment(Environment environment) {
@@ -39,7 +35,7 @@ public class KafkaEhrProducerConfig {
 
     @Bean
     public ProducerFactory<String, String> tcTestSendProducerFactory() {
-        return new TracingProducerFactory<>(new DefaultKafkaProducerFactory<>(getConfigProps()), tracer);
+        return new DefaultKafkaProducerFactory<>(getConfigProps());
     }
 
     @Bean
