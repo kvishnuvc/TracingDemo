@@ -7,7 +7,7 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RequestDataListener implements MessageListener {
+public class RequestDataListener implements MessageListener<String> {
     final String topic = "com.vrp.request.topic";
 
 

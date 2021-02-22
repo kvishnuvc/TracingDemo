@@ -28,8 +28,21 @@ inspectit:
         advanced:
           instrument-only-inherited-methods: true
 
+      's_schedular_jobs':
+        interfaces:
+          - name: 'org.quartz.Job'
+        methods:
+          - name: 'execute'
+        advanced:
+          instrument-only-inherited-methods: true
 
     rules:
+      'r_schedular_jobs':
+        scopes:
+          's_schedular_jobs': true
+        tracing:
+          start-span: true
+
       'r_kafka_producer_send':
         scopes:
           's_kafka_producer_send': true
