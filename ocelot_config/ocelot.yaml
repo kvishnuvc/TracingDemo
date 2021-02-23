@@ -54,6 +54,7 @@ inspectit:
         pre-entry:
           'mc-val':
             action: 'a_kafka_producer_send'
+        post-entry:
           'do_down_propagation':
             action: 'a_kafka_down_propagation'
         entry:
